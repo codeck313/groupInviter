@@ -8,14 +8,18 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
 from selenium.common.exceptions import UnexpectedAlertPresentException
 
-dataBaseName = 'dataV1.csv'
-nameRow = 2
-numberRow = 3
+# Enter your datasheet name and correct columns number here
+dataBaseName = 'get-your-own.csv'
+nameRow = 0
+numberRow = 1
 
+# Enter the message here. msg1 and msg2 are in 2 different lines.
+# Increase the delayTime if the text is not getting entered properly
 msg1 = "I am"
 msg2 = "Lazy"
 delayTime = 15
 
+# chromium driver path
 driver = webdriver.Chrome(executable_path="./chromedriver")
 
 with open(dataBaseName, 'r') as file:
@@ -24,6 +28,7 @@ with open(dataBaseName, 'r') as file:
 
     # Scan the code before proceeding further
     input('Ready?(Press Enter to Continue)')
+
     for row in reader:
         print("Sending to", row[nameRow])
         try:
@@ -42,7 +47,9 @@ with open(dataBaseName, 'r') as file:
                 print("Timed out waiting for page to load")
 
             WebDriverWait(driver, delayTime)
-            msg_box = driver.find_element_by_class_name('_2A8P4')
+            msg_box = driver.find_element_by_class_name(
+                '_2A8P4')  # TODO if things dont work
+            driver.close()
 
             ActionChains(driver).key_down(
                 Keys.SHIFT).key_down(Keys.ENTER).perform()
@@ -56,7 +63,8 @@ with open(dataBaseName, 'r') as file:
             msg_box.send_keys(msg2)
 
             input('Confirm?')
-            driver.find_element_by_class_name('_1E0Oz').click()
+            driver.find_element_by_class_name(
+                '_1E0Oz').click()  # TODO if things dont work
             driver.close()
             driver.switch_to_window(driver.window_handles[0])
         except UnexpectedAlertPresentException:
